@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 import { WhaleTransaction } from '../types';
 import {  Scraper } from 'agent-twitter-client';
 import { TwitterApi, TwitterApiTokens } from 'twitter-api-v2';
+import axios from 'axios';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -9,6 +10,7 @@ dotenv.config();
 export class NotificationService {
     private twitterClient: Scraper;
     private client: TwitterApi | null = null;
+    private authServerUrl = 'http://localhost:3333';
 
     constructor() {
         this.twitterClient = new Scraper();
@@ -17,34 +19,25 @@ export class NotificationService {
 
     private async initializeTwitterClient() {
         try {
-            if (!process.env.TWITTER_USERNAME || !process.env.TWITTER_PASSWORD || !process.env.TWITTER_EMAIL) {
+            // Use environment variables for Twitter credentials
+            const accessToken = process.env.TWITTER_ACCESS_TOKEN;
+            const accessSecret = process.env.TWITTER_ACCESS_TOKEN_SECRET;
+            const apiKey = process.env.TWITTER_API_KEY;
+            const apiSecret = process.env.TWITTER_API_SECRET;
+            
+            if (!accessToken || !accessSecret || !apiKey || !apiSecret) {
                 throw new Error('Missing Twitter credentials in environment variables');
             }
 
-            // Add more detailed logging
-            console.log('Attempting Twitter login...');
+            // Initialize Twitter client with the credentials
+            this.client = new TwitterApi({
+                appKey: apiKey,
+                appSecret: apiSecret,
+                accessToken: accessToken,
+                accessSecret: accessSecret,
+            });
             
-            try {              
-
-                const tokens: TwitterApiTokens =  {
-                    appKey: process.env.TWITTER_API_KEY!,
-                    appSecret: process.env.TWITTER_API_SECRET!,
-                    accessToken: process.env.TWITTER_ACCESS_TOKEN!,
-                    accessSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET!
-                }
-
-                this.client = new TwitterApi( tokens );
-                
-                console.log('Successfully logged into Twitter');
-            } catch (loginError: any) {
-                // More specific error handling for login failures
-                const errorMessage = loginError.errors?.[0]?.message || loginError.message || 'Unknown login error';
-                console.error('Twitter login failed:', {
-                    message: errorMessage,
-                    fullError: loginError
-                });
-                throw new Error(`Twitter login failed: ${errorMessage}`);
-            }
+            console.log('Successfully authenticated with Twitter');
         } catch (error) {
             console.error('Failed to initialize Twitter client:', error);
             throw error;
@@ -61,7 +54,7 @@ export class NotificationService {
         const message = this.formatTwitterMessage(transaction);
         try {
             // await this.twitterClient.sendTweet(message);
-            const tweet = await this.client?.v2.tweet(message);
+            const tweet = await this.client?.v1.tweet(message);
             console.log('Successfully posted to Twitter:', tweet);
         } catch (error) {
             console.error('Failed to post to Twitter:', error);

@@ -42,6 +42,23 @@
             "env": {
                 "NODE_ENV": "development"
             }
-        }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug Auth Server",
+            "skipFiles": ["<node_internals>/**"],
+            "program": "${workspaceFolder}/src/auth/auth-server.ts",
+            "runtimeArgs": ["-r", "ts-node/register"],
+            "console": "integratedTerminal",
+            "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+            "env": {
+              "NODE_ENV": "development",
+              "PORT": "3333",
+              "TWITTER_CLIENT_ID": "${env:TWITTER_CLIENT_ID}",
+              "TWITTER_REDIRECT_URI": "${env:TWITTER_REDIRECT_URI}",
+              "SESSION_SECRET": "${env:SESSION_SECRET}"
+            }
+          }
     ]
 } 
