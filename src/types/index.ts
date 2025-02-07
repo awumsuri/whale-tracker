@@ -1,0 +1,34 @@
+export interface WhaleFilter {
+    tx_types: string[];
+    min_usd_value: number;
+    new_trade: boolean;
+    chains?: string[];
+    tokens?: string[];
+}
+
+export interface WebSocketCommand {
+    type: string;
+    filter?: WhaleFilter;
+    list_id?: number;
+    wallet?: string;
+}
+
+export interface WhaleTransaction {
+    wallet: string;
+    whale_category: string;
+    new_token: string;
+    amount_usd: number;
+    chain: string;
+    trade_type: string;
+    timestamp: number;
+}
+
+export interface WhaleInfo {
+    id: string;
+    address: string;
+    category: string;
+    lastBuyToken?: string;
+    buyAmount?: number;
+    chain?: string;
+    timestamp?: number;
+} 
