@@ -1,6 +1,22 @@
+import dotenv from 'dotenv';
 import { WhaleTransaction } from '../types';
+import {  Scraper } from 'agent-twitter-client';
+
+// Load environment variables from .env file
+dotenv.config();
 
 export class NotificationService {
+    private twitterClient: Scraper;
+
+    constructor() {
+        this.twitterClient = new Scraper ();
+        this.twitterClient.login(
+            process.env.TWITTER_USERNAME!,
+            process.env.TWITTER_PASSWORD!,
+            process.env.TWITTER_EMAIL!
+        );
+    }
+
     async notifyNewTrade(transaction: WhaleTransaction): Promise<void> {
         // TODO: Implement notification logic
         await this.postToTwitter(transaction);
@@ -9,8 +25,13 @@ export class NotificationService {
 
     private async postToTwitter(transaction: WhaleTransaction): Promise<void> {
         const message = this.formatTwitterMessage(transaction);
-        // TODO: Implement Twitter API integration
-        console.log('Posting to Twitter:', message);
+        try {
+            await this.twitterClient.sendTweet(message);
+            console.log('Successfully posted to Twitter:', message);
+        } catch (error) {
+            console.error('Failed to post to Twitter:', error);
+            throw error;
+        }
     }
 
     private async sendTelegramAlert(transaction: WhaleTransaction): Promise<void> {

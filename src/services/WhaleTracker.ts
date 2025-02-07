@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import WebSocket from 'ws';
-import { WhaleTransaction, WhaleFilter, WebSocketCommand } from '../types';
+import { WhaleTransaction, WhaleFilter, WebSocketCommand, WhaleConfig } from '../types';
 import { DatabaseService } from './DatabaseService';
 import { NotificationService } from './NotificationService';
 import whaleData from '../data/whales.json';
@@ -33,7 +33,9 @@ export class WhaleTracker {
     private setupWebSocket(): void {
         this.ws.addListener('open', () => {
             this.isConnected = true;
-            this.subscribeToFeed();
+            for (const whale of whaleData) {
+                this.subscribeToFeed(whale);
+            }
             console.log('Connected to Cielo WebSocket');
         });
 
@@ -54,23 +56,30 @@ export class WhaleTracker {
         });
     }
 
-    private subscribeToFeed(): void {
-        const filter: WhaleFilter = {
-            tx_types: ['swap'],
-            min_usd_value: this.minUsdThreshold,
-            new_trade: true
-        };
+    private  subscribeToFeed(whale: WhaleConfig): void {
+        for (const address of whale.addresses) {
 
-        const command: WebSocketCommand = {
-            type: 'subscribe_feed',
-            filter
-        };
+            const command: WhaleFilter = {
+                type: 'subscribe_wallet',
+                wallet: address,
+                filter: {
+                    tx_types: ['swap'],
+                    chains: [whale.network.toLowerCase()],
+                    min_usd_value: this.minUsdThreshold,
+                    new_trade: true
+                }                
+            };
 
-        console.log('Subscribing to feed with filter:', filter);
-        this.ws.send(JSON.stringify(command));
+            console.log('Subscribing to feed with filter:',  JSON.stringify(command));
+            this.ws.send(JSON.stringify(command));
+        }
     }
 
     private async handleTransaction(event: any): Promise<void> {
+        if (event.type === 'feed_subscribed') {
+            console.log('Feed subscribed successfully');
+            return;
+        }
         // Check if we have a valid data structure
         if (!event.data?.items || !Array.isArray(event.data.items)) {
             console.warn('Received invalid event structure:', event);
@@ -130,14 +139,5 @@ export class WhaleTracker {
         }
     }
 
-    async initialize(): Promise<void> {
-        console.log('Initializing whale categories from whale data');
-        for (const whale of whaleData.whales) {
-            for (const address of whale.addresses) {
-                console.log(`Setting category for address ${address} to "${whale.token} Whale"`);
-                await this.db.updateWhaleCategory(address, `${whale.token} Whale`);
-            }
-        }
-        console.log('Whale categories initialization complete');
-    }
+   
 } 

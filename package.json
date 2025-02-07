@@ -13,6 +13,7 @@
   "author": "Suri Mtui",
   "license": "ISC",
   "dependencies": {
+    "agent-twitter-client": "^0.0.18",
     "dotenv": "^16.4.5",
     "mongodb": "^6.5.0",
     "ws": "^8.16.0"

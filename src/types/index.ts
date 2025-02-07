@@ -1,9 +1,13 @@
 export interface WhaleFilter {
-    tx_types: string[];
-    min_usd_value: number;
-    new_trade: boolean;
-    chains?: string[];
-    tokens?: string[];
+    type: string;
+    wallet: string;
+    filter: {
+        tx_types: string[];
+        min_usd_value: number;
+        new_trade: boolean;
+        chains?: string[];
+        tokens?: string[];
+    }
 }
 
 export interface WebSocketCommand {
@@ -32,3 +36,9 @@ export interface WhaleInfo {
     chain?: string;
     timestamp?: number;
 } 
+
+export interface WhaleConfig {
+    token: string;
+    network: string;
+    addresses: string[];
+}
