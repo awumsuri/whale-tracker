@@ -33,9 +33,7 @@ export class WhaleTracker {
     private setupWebSocket(): void {
         this.ws.addListener('open', () => {
             this.isConnected = true;
-            for (const whale of whaleData) {
-                this.subscribeToFeed(whale);
-            }
+            this.subscribeToAllWhales();
             console.log('Connected to Cielo WebSocket');
         });
 
@@ -56,7 +54,18 @@ export class WhaleTracker {
         });
     }
 
-    private  subscribeToFeed(whale: WhaleConfig): void {
+    private subscribeToAllWhales(): void {
+        console.log(`Subscribing to ${whaleData.length} whale configurations...`);
+        whaleData.forEach(whale => {
+            try {
+                this.subscribeToFeed(whale);
+            } catch (error) {
+                console.error(`Failed to subscribe to whale ${whale.token || 'unknown'}:`, error);
+            }
+        });
+    }
+
+    private subscribeToFeed(whale: WhaleConfig): void {
         for (const address of whale.addresses) {
 
             const command: WhaleFilter = {
@@ -76,7 +85,7 @@ export class WhaleTracker {
     }
 
     private async handleTransaction(event: any): Promise<void> {
-        if (event.type === 'feed_subscribed') {
+        if (event.type === 'feed_subscribed' || event.type === 'wallet_subscribed') {
             console.log('Feed subscribed successfully');
             return;
         }
