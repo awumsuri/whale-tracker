@@ -10,7 +10,7 @@ dotenv.config();
 
 export class WhaleTracker {
     private ws: WebSocket;
-    private db: DatabaseService;
+    // private db: DatabaseService;
     private notifications: NotificationService;
     private isConnected: boolean = false;
 
@@ -20,7 +20,7 @@ export class WhaleTracker {
         private apiKey: string = process.env.CEILO_API_KEY || ''
     ) {
         console.log(`Initializing WhaleTracker with minimum USD threshold: ${minUsdThreshold}`);
-        this.db = new DatabaseService();
+        // this.db = new DatabaseService();
         this.notifications = new NotificationService();
         this.ws = new WebSocket(apiUrl, {
             headers: {
@@ -106,7 +106,8 @@ export class WhaleTracker {
                 chain: data.chain,
                 trade_type: data.tx_type,
                 timestamp: data.timestamp,
-                tx_hash: data.tx_hash
+                tx_hash: data.tx_hash,
+                dex: data.dex
             };
 
             console.log(`Processing whale transaction:`, {
@@ -117,7 +118,7 @@ export class WhaleTracker {
                 is_sell: data.is_sell
             });
 
-            await this.db.saveTransaction(transaction);
+            // await this.db.saveTransaction(transaction);
             await this.notifications.notifyNewTrade(transaction);
         }
     }

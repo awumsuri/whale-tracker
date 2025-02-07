@@ -76,7 +76,8 @@ export class NotificationService {
     }
 
     private formatTwitterMessage(transaction: WhaleTransaction): string {
-        return `🐋 ${transaction.whale_category} just bought $${transaction.amount_usd.toLocaleString()} of ${transaction.new_token} on ${transaction.chain}`;
+        return `🐋 ${transaction.wallet} just bought $${transaction.amount_usd.toLocaleString()} of ${transaction.new_token} on ${transaction.chain} on DEX ${transaction.dex} \n
+        hash: ${transaction.tx_hash}`;
     }
 
     private formatTelegramMessage(transaction: WhaleTransaction): string {
