@@ -89,42 +89,32 @@ export class WhaleTracker {
             console.log('Feed subscribed successfully');
             return;
         }
-        // Check if we have a valid data structure
-        if (!event.data?.items || !Array.isArray(event.data.items)) {
-            console.warn('Received invalid event structure:', event);
-            return;
-        }
 
-        console.log(`Processing ${event.data.items.length} transactions`);
-
-        // Process each transaction in the items array
-        for (const data of event.data.items) {
+        // Handle single transaction event
+        if (event.type === 'tx' && event.data) {
+            const data = event.data;
+            
             if (!this.isValidTransaction(data)) {
                 console.log(`Skipping invalid transaction: ${JSON.stringify(data)}`);
-                continue;
-            }
-
-            const whaleInfo = await this.db.getWhaleInfo(data.wallet);
-            if (!whaleInfo) {
-                console.log(`No whale info found for wallet: ${data.wallet}`);
-                continue;
-            }
+                return;
+            }          
 
             const transaction: WhaleTransaction = {
                 wallet: data.wallet,
-                whale_category: whaleInfo.category,
-                new_token: data.token1_symbol || data.symbol || '',
-                amount_usd: data.amount_usd || data.token1_amount_usd || 0,
+                new_token: data.is_sell ? data.token1_symbol : data.token0_symbol,
+                amount_usd: data.token1_amount_usd || data.token0_amount_usd || 0,
                 chain: data.chain,
                 trade_type: data.tx_type,
-                timestamp: data.timestamp
+                timestamp: data.timestamp,
+                tx_hash: data.tx_hash
             };
 
             console.log(`Processing whale transaction:`, {
                 wallet: transaction.wallet,
                 category: transaction.whale_category,
                 amount_usd: transaction.amount_usd,
-                token: transaction.new_token
+                token: transaction.new_token,
+                is_sell: data.is_sell
             });
 
             await this.db.saveTransaction(transaction);
@@ -133,9 +123,12 @@ export class WhaleTracker {
     }
 
     private isValidTransaction(data: any): boolean {
-        const isValid = data.tx_type === 'swap' && data.amount_usd >= this.minUsdThreshold;
+        const isValid = data.tx_type === 'swap' && 
+            (data.token0_amount_usd >= this.minUsdThreshold || 
+             data.token1_amount_usd >= this.minUsdThreshold);
+        
         if (!isValid) {
-            console.log(`Invalid transaction - Type: ${data.tx_type}, Amount: $${data.amount_usd}`);
+            console.log(`Invalid transaction - Type: ${data.tx_type}, Amount: $${data.token0_amount_usd || data.token1_amount_usd}`);
         }
         return isValid;
     }
