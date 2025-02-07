@@ -1,1 +1,148 @@
- 
+{
+    "whales": [
+        {
+            "token": "TRUMP",
+            "network": "Solana",
+            "addresses": [
+                "5CP6zv8a17mz91v6rMruVH6ziC5qAL8GFaJzwrX9Fvup",
+                "Eq6WsTrn3c9GQA7TXeaXuUP1MkfFJUFxv1Fiaq4TdFoB",
+                "GybhvUZzTq4qYBc292dz4HE4oQPZJGC9xGJdEH9uYeHK",
+                "7PypumCQ4wco2bV4UAjCwbrdCdnWwyAacjxRhX3yuz8R",
+                "E97JW7BKv7VwdZfCdqwhboAmCCSJbFJSx6HhAmNDNJsc"
+            ]
+        },
+        {
+            "token": "MOODENG",
+            "network": "Solana",
+            "addresses": [
+                "7GBD3t2xWGbu9xhQP9r81EEbwhFvSp3Si4ki4gi7Sss6"
+            ]
+        },
+        {
+            "token": "RETARDIO",
+            "network": "Solana", 
+            "addresses": [
+                "4XTbg7KcgrfbU1XqyXw3tAXXTxiVkpJMCHpPLMmBJBPW"
+            ]
+        },
+        {
+            "token": "ARC",
+            "network": "Solana",
+            "addresses": [
+                "3jgub3P9KP3XA9Dwh7XpKu35BiQNTZZXbPmfBAJMsroL",
+                "2EkhJvG7eunHrecNsAijNx8aGcv2Kjd3schd12Gb5tmp",
+                "BH84Uo2YAnyWRUWeWyfFzttRmE51V682xUaD6NrLHM88"
+            ]
+        },
+        {
+            "token": "FARTCOIN",
+            "network": "Solana",
+            "addresses": [
+                "A1ECE86o3tz6UWmwMWicrqZmwRZ7RCRzmYYa9okNQRBw",
+                "5wTLevkkUWzKgRTWKcSjrgdoP8TnrEnXYGaAxFKibsS5",
+                "6wTVWXQPCmmAJra4wFMoy6kae5s2FguHyhcXyhTGmgTt",
+                "38ESLHdJkqNvMbJmbgsHJGXjJPpsL4TkvSUgXegYgvpr",
+                "GH4NtrMtTrxRDMbQacT6bgyWVwDkoujLnCYwUY9pa5Cu",
+                "C5YSQjFWwdPcQnEyh51Gt8tTWzRpzAPAyqUi9GX526SD"
+            ]
+        },
+        {
+            "token": "GRIFFAIN",
+            "network": "Solana",
+            "addresses": [
+                "FjoTCAFMKStE18gBHVJdgNHXLhWvYExDdcek7Hiisyai",
+                "TWMfGxiscnZCnqqcyaKJyCsVQ8wCnJpx2C1igks8QLo",
+                "7GyQ8dD5D4PYkUWXNSEE5cvv2SiWWNXEBGrsmxH49AnR"
+            ]
+        },
+        {
+            "token": "MICHI",
+            "network": "Solana",
+            "addresses": [
+                "6gqHVs2uWPQCDxUGHCpG9JjrDHx62sWfWYe1WuDRdyDo"
+            ]
+        },
+        {
+            "token": "UFD",
+            "network": "Solana",
+            "addresses": [
+                "8yJFWmVTQq69p6VJxGwpzW7ii7c5J9GRAtHCNMMQPydj",
+                "DV81yhdM3CBhDms6PMxaiD1okri4CdxpLCDcjP8e1uzN"
+            ]
+        },
+        {
+            "token": "GIGA",
+            "network": "Solana",
+            "addresses": [
+                "DSgpmWtxTqh4HQX5oiJogwkRmQk3EZDbm1tmXAmCE2iK",
+                "CTRWQ3mn1VSPdZgJdA3GiLCcBo1vA24gPnZGma89mrKn",
+                "ChujTAY473j99EwwLGJVkTT9mUYj4XBqLBdbQn3sTjUS"
+            ]
+        },
+        {
+            "token": "PENGU",
+            "network": "Solana",
+            "addresses": [
+                "HoTdBjGcRhhti93EeFBwYnV8NCiZZ7wqQME3yqwYL8YZ",
+                "GBud1mvx6N3Km4rP8xHAh7RptZqYXk4Zf7wC5veSHXh9",
+                "CmsTjbYTaJ6VX3fqHNcxS2Zg4iPcG45E5q4X1Z3nFnn3"
+            ]
+        },
+        {
+            "token": "CHILLGUY",
+            "network": "Solana",
+            "addresses": [
+                "HfqgVXrKv8vBoqLGqGgEpxAR1vw6hUH28CUkdytU2Cuf",
+                "8WXKcUjwMU5TxiEN4mjw52iP4uPKx8VpXGozqMadqhyq",
+                "6KVyzB7Sxx2Rnk7J8ZEhBZPbKyiRq3tPY9YNhtCjcems",
+                "4GwjiXRfCerHjrf7fjPPsewLMTu3gN7pMnkA3bGcANT3",
+                "65jT5wk8FQyUWcSjgBsBRLU5NiSYGVYwRSKRiopPNAQ3"
+            ]
+        },
+        {
+            "token": "PIPPIN",
+            "network": "Solana",
+            "addresses": [
+                "D6nUhQ7o3TQwk243mgVS5hsdkuJk71fxZib3KxY4Upyv",
+                "3iE9vqtBWHW28Md64Q5VHAECWPb4L2dpfbi71L5cZyeu",
+                "BSZ5Qn9DEZZhXvTGvaQhobgXCCZPJDSkgB9dZnAhgAPd",
+                "9UWZFoiCHeYRLmzmDJhdMrP7wgrTw7DMSpPiT2eHgJHe"
+            ]
+        },
+        {
+            "token": "MUMU",
+            "network": "Solana",
+            "addresses": [
+                "AziQ7huS4JbfqH8mAJqLimfJATKME4wNCf9EwVT6A4Zc",
+                "BHCm58VsiSq9p3hqjprLAs6wtjXjtuGnz6vj1i3Upe7X"
+            ]
+        },
+        {
+            "token": "FWOG",
+            "network": "Solana",
+            "addresses": [
+                "J5Un4w9dY1iRrj6zr12yvyzrKQhBFYKtuZ8BzQZ35xFV",
+                "HD2sAksiPtJRUbtReLfbvH1m6phDDn9avsBJteN29qEV"
+            ]
+        },
+        {
+            "token": "POPCAT",
+            "network": "Solana",
+            "addresses": [
+                "FQYAQe4Eb46MPBXjDQa8FrFr5YRL6Jn6bmZRcGkjPeGf",
+                "GCvHhEUYQwTJ8jyf8Lc4bv8jBXyZU4LMMsZCobwEPzvM",
+                "6wTVWXQPCmmAJra4wFMoy6kae5s2FguHyhcXyhTGmgTt"
+            ]
+        },
+        {
+            "token": "MOBY",
+            "network": "Solana",
+            "addresses": [
+                "4sZm6CRqUTUz9EE3nE8wPfdTHBHzQHWj1Tcx4m1htfWX",
+                "5AS99FN4MrtN1co7S1ewmxg4PAku6p2vuehD54AH48Sm",
+                "2fgUSSpZFi8PjyhbrETSeLutJpFsuCfWsk2H6gb3Reye",
+                "FSr4GtCdzGguCEAQHHWbb56iaktFVuxGJPsZS5K37evz"
+            ]
+        }
+    ]
+} 
