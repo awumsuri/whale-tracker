@@ -18,15 +18,16 @@ export interface WebSocketCommand {
 }
 
 export interface WhaleTransaction {
-    wallet: string;
-    whale_category?: string;
+    wallet: string;    
     new_token: string;
     amount_usd: number;
     chain: string;
-    trade_type: string;
-    timestamp: number;
-    tx_hash: string;
+    trade_type?: string;
+    timestamp?: number;
+    tx_hash?: string;
     dex: string;
+    is_sell: boolean;
+    category: string;
 }
 
 export interface WhaleInfo {

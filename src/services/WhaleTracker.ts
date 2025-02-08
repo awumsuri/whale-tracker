@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import WebSocket from 'ws';
-import { WhaleTransaction, WhaleFilter, WebSocketCommand, WhaleConfig } from '../types';
+import { WhaleTransaction, WhaleFilter, WebSocketCommand, WhaleConfig, WhaleInfo } from '../types';
 import { DatabaseService } from './DatabaseService';
 import { NotificationService } from './NotificationService';
 import whaleData from '../data/whales.json';
@@ -10,7 +10,7 @@ dotenv.config();
 
 export class WhaleTracker {
     private ws: WebSocket;
-    // private db: DatabaseService;
+    private db: DatabaseService;
     private notifications: NotificationService;
     private isConnected: boolean = false;
 
@@ -20,7 +20,7 @@ export class WhaleTracker {
         private apiKey: string = process.env.CEILO_API_KEY || ''
     ) {
         console.log(`Initializing WhaleTracker with minimum USD threshold: ${minUsdThreshold}`);
-        // this.db = new DatabaseService();
+        this.db = new DatabaseService();
         this.notifications = new NotificationService();
         this.ws = new WebSocket(apiUrl, {
             headers: {
@@ -99,6 +99,8 @@ export class WhaleTracker {
                 return;
             }          
 
+            const whaleInfo: WhaleInfo = await this.db.getWhaleInfo(data.wallet)
+
             const transaction: WhaleTransaction = {
                 wallet: data.wallet,
                 new_token: data.is_sell ? data.token1_symbol : data.token0_symbol,
@@ -107,12 +109,14 @@ export class WhaleTracker {
                 trade_type: data.tx_type,
                 timestamp: data.timestamp,
                 tx_hash: data.tx_hash,
-                dex: data.dex
+                dex: data.dex,
+                is_sell: data.is_sell,
+                category: whaleInfo.category
             };
 
             console.log(`Processing whale transaction:`, {
                 wallet: transaction.wallet,
-                category: transaction.whale_category,
+                category: transaction.category,
                 amount_usd: transaction.amount_usd,
                 token: transaction.new_token,
                 is_sell: data.is_sell
@@ -142,5 +146,6 @@ export class WhaleTracker {
         }
     }
 
+    
    
 } 

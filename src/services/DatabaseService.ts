@@ -26,13 +26,13 @@ export class DatabaseService {
         }
     }
 
-    async getWhaleInfo(address: string): Promise<WhaleInfo | null> {
+    async getWhaleInfo(address: string): Promise<WhaleInfo> {
         const whale = await this.db.collection('whales').findOne({ address });
-        return whale ? {
-            id: whale._id.toString(),
-            address: whale.address,
-            category: whale.category
-        } : null;
+        return  {
+            id: whale!._id.toString(),
+            address: whale!.address,
+            category: whale!.category
+        }
     }
 
     async saveTransaction(transaction: WhaleTransaction): Promise<void> {
