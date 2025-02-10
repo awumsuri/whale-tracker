@@ -5,7 +5,7 @@ import whaleData from '../data/whales.json';
 dotenv.config();
 
 async function populateDatabase() {
-    const uri = process.env.MONGODB_URI || 'mongodb://localhost:7777';
+    const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017';
     const client = new MongoClient(uri);
 
     try {
