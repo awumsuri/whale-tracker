@@ -21,6 +21,7 @@ export class WhaleTracker {
     ) {
         console.log(`Initializing WhaleTracker with minimum USD threshold: ${minUsdThreshold}`);
         this.db = new DatabaseService();
+        this.db.connect();
         this.notifications = new NotificationService();
         this.ws = new WebSocket(apiUrl, {
             headers: {
