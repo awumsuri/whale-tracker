@@ -52,6 +52,8 @@ export class WhaleTracker {
 
         this.ws.addListener('error', (error) => {
             console.error('WebSocket error:', error);
+            this.isConnected = false;
+            this.reconnect();
         });
     }
 
