@@ -26,7 +26,7 @@ last_timestamp = None
 mongo_uri = os.getenv('MONGODB_URI', 'mongodb://localhost:27017/')  # Default fallback if env var not set
 client = MongoClient(mongo_uri)
 db = client['whale-tracker']  # Database name
-trades_collection = db['twitter-whale-posts']  # Collection name
+trades_collection = db['twitter_whale_posts']  # Collection name
 
 # Set up logging configuration
 def setup_logging():
