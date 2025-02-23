@@ -21,7 +21,7 @@ headers = {
 last_timestamp = None
 
 # MongoDB connection setup
-mongo_uri = os.getenv('MONGO_URI', 'mongodb://localhost:7777/')  # Default fallback if env var not set
+mongo_uri = os.getenv('MONGODB_URI', 'mongodb://localhost:7777/')  # Default fallback if env var not set
 client = MongoClient(mongo_uri)
 db = client['whale-tracker']  # Database name
 trades_collection = db['twitter-whale-posts']  # Collection name
@@ -48,7 +48,7 @@ def fetch_live_whale_trades():
         
     # Convert last_timestamp to a datetime object and subtract 20 minutes
     last_timestamp_dt = datetime.fromisoformat(last_timestamp)
-    adjusted_timestamp = last_timestamp_dt - timedelta(minutes=15)
+    adjusted_timestamp = last_timestamp_dt - timedelta(minutes=20)
 
     # Convert adjusted timestamp back to ISO format
     adjusted_timestamp_str = adjusted_timestamp.isoformat(timespec='seconds')
@@ -134,4 +134,4 @@ if __name__ == "__main__":
     print("🚀 Starting Live Whale Trade Monitor...")
     while True:
         fetch_live_whale_trades()
-        time.sleep(300)  # Run every 5 minutes
+        time.sleep(1200)  # Run every 20 minutes
