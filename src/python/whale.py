@@ -4,6 +4,7 @@ import time
 from datetime import datetime, timedelta, timezone
 import pymongo
 from pymongo import MongoClient
+import os
 
 base_url = "https://swap-api.assetdash.com/api/api_v5/whalewatch"
 
@@ -20,7 +21,8 @@ headers = {
 last_timestamp = None
 
 # MongoDB connection setup
-client = MongoClient('mongodb://localhost:7777/')  # Replace with your MongoDB connection string
+mongo_uri = os.getenv('MONGO_URI', 'mongodb://localhost:7777/')  # Default fallback if env var not set
+client = MongoClient(mongo_uri)
 db = client['whale-tracker']  # Database name
 trades_collection = db['twitter-whale-posts']  # Collection name
 
