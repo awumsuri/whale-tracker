@@ -5,6 +5,8 @@ from datetime import datetime, timedelta, timezone
 import pymongo
 from pymongo import MongoClient
 import os
+import logging
+from logging.handlers import RotatingFileHandler
 
 base_url = "https://swap-api.assetdash.com/api/api_v5/whalewatch"
 
@@ -26,6 +28,38 @@ client = MongoClient(mongo_uri)
 db = client['whale-tracker']  # Database name
 trades_collection = db['twitter-whale-posts']  # Collection name
 
+# Set up logging configuration
+def setup_logging():
+    """Configure logging with both file and console handlers."""
+    logger = logging.getLogger('whale_tracker')
+    logger.setLevel(logging.INFO)
+
+    # Create logs directory if it doesn't exist
+    os.makedirs('logs', exist_ok=True)
+
+    # File handler (rotating log files, max 5MB each, keep 5 backup files)
+    file_handler = RotatingFileHandler(
+        'logs/whale_tracker.log',
+        maxBytes=5*1024*1024,
+        backupCount=5
+    )
+    file_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+    file_handler.setFormatter(file_formatter)
+    
+    # Console handler
+    console_handler = logging.StreamHandler()
+    console_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+    console_handler.setFormatter(console_formatter)
+
+    # Add both handlers to the logger
+    logger.addHandler(file_handler)
+    logger.addHandler(console_handler)
+
+    return logger
+
+# Initialize logger
+logger = setup_logging()
+
 def format_market_cap(market_cap):
     if market_cap >= 1_000_000_000:
         return f"${market_cap / 1_000_000_000:.2f}B"
@@ -45,6 +79,7 @@ def fetch_live_whale_trades():
     # If it's the first run, get the latest trades (set an initial timestamp)
     if last_timestamp is None:
         last_timestamp = datetime.utcnow().isoformat()
+        logger.info("Initializing last_timestamp to %s", last_timestamp)
         
     # Convert last_timestamp to a datetime object and subtract 20 minutes
     last_timestamp_dt = datetime.fromisoformat(last_timestamp)
@@ -62,12 +97,13 @@ def fetch_live_whale_trades():
 
             if data.get("transactions"):
                 latest_trades = data["transactions"]
+                logger.info("Found %d new whale transactions", len(latest_trades))
 
                 # Extract the most recent timestamp from fetched trades
                 new_timestamp = max(tx["timestamp"] for tx in latest_trades)
 
                 # Process transactions
-                print("\n🔹 New Whale Transactions Found:")
+                logger.info("Processing new whale transactions")
                 for tx in latest_trades:
                     whale_name = tx["swap_whalewatch_list"]["name"].replace(" ", "")
                     trade_type = tx["transaction_type"]
@@ -113,25 +149,27 @@ def fetch_live_whale_trades():
                     # Insert trade into MongoDB
                     try:
                         trades_collection.insert_one(trade_doc)
-                        print(f"✅ Trade saved to MongoDB: {whale_name} {action} {token_symbol}")
+                        logger.info("Trade saved to MongoDB: %s %s %s", whale_name, action, token_symbol)
                     except Exception as e:
-                        print(f"❌ Error saving to MongoDB: {e}")
+                        logger.error("Error saving to MongoDB: %s", str(e))
 
                 # Update last_timestamp to the latest trade's timestamp
                 last_timestamp = new_timestamp
+                logger.debug("Updated last_timestamp to %s", new_timestamp)
 
             else:
-                print("✅ No new trades since last check.")
+                logger.info("No new trades since last check")
 
         else:
-            print(f"⚠️ API Error: {response.status_code} - {response.text}")
+            logger.error("API Error: %d - %s", response.status_code, response.text)
 
     except Exception as e:
-        print(f"❌ Error fetching whale trades: {e}")
+        logger.error("Error fetching whale trades: %s", str(e))
 
 # **🔄 Poll the API every 5 minutes**
 if __name__ == "__main__":
-    print("🚀 Starting Live Whale Trade Monitor...")
+    logger.info("Starting Live Whale Trade Monitor...")
     while True:
         fetch_live_whale_trades()
+        logger.debug("Sleeping for 20 minutes")
         time.sleep(1200)  # Run every 20 minutes
