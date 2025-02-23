@@ -9,7 +9,7 @@ export class DatabaseService {
     private db: Db;
 
     constructor() {
-        const uri = process.env.MONGODB_URI || 'mongodb://localhost:7777';
+        const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017';
         const dbName = process.env.MONGODB_DB_NAME || 'whale-tracker';
         
         this.client = new MongoClient(uri);

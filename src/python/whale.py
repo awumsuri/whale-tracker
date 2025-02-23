@@ -23,7 +23,7 @@ headers = {
 last_timestamp = None
 
 # MongoDB connection setup
-mongo_uri = os.getenv('MONGODB_URI', 'mongodb://localhost:7777/')  # Default fallback if env var not set
+mongo_uri = os.getenv('MONGODB_URI', 'mongodb://localhost:27017/')  # Default fallback if env var not set
 client = MongoClient(mongo_uri)
 db = client['whale-tracker']  # Database name
 trades_collection = db['twitter-whale-posts']  # Collection name
