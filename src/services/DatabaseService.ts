@@ -1,5 +1,5 @@
 import { WhaleInfo, WhaleTransaction } from '../types';
-import { MongoClient, Db } from 'mongodb';
+import { MongoClient, Db, Collection } from 'mongodb';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -26,17 +26,27 @@ export class DatabaseService {
         }
     }
 
-    async getWhaleInfo(address: string): Promise<WhaleInfo> {
+    getCollection(name: string): Collection {
+        return this.db.collection(name);
+    }
+
+    async getWhaleInfo(address: string): Promise<WhaleInfo | null> {
         const whale = await this.db.collection('whales').findOne({ address });
-        return  {
-            id: whale!._id.toString(),
-            address: whale!.address,
-            category: whale!.category
-        }
+        if (!whale) return null;
+        
+        return {
+            id: whale._id.toString(),
+            address: whale.address,
+            category: whale.category
+        };
     }
 
     async saveTransaction(transaction: WhaleTransaction): Promise<void> {
-        await this.db.collection('transactions').insertOne(transaction);
+        await this.db.collection('transactions').insertOne({
+            ...transaction,
+            posted: false, // Add posted flag for tracking
+            timestamp: transaction.timestamp || Date.now()
+        });
     }
 
     async updateWhaleCategory(address: string, newCategory: string): Promise<void> {

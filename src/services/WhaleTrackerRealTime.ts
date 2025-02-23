@@ -8,7 +8,7 @@ import whaleData from '../data/whales.json';
 // Load environment variables from .env file
 dotenv.config();
 
-export class WhaleTracker {
+export class WhaleTrackerRealTime {
     private ws: WebSocket;
     private db: DatabaseService;
     private notifications: NotificationService;
@@ -102,7 +102,11 @@ export class WhaleTracker {
                 return;
             }          
 
-            const whaleInfo: WhaleInfo = await this.db.getWhaleInfo(data.wallet)
+            const whaleInfo: WhaleInfo | null = await this.db.getWhaleInfo(data.wallet)
+            if (!whaleInfo) {
+                console.log(`Whale info not found for wallet: ${data.wallet}`);
+                return;
+            }
 
             const transaction: WhaleTransaction = {
                 wallet: data.wallet,
@@ -114,7 +118,8 @@ export class WhaleTracker {
                 tx_hash: data.tx_hash,
                 dex: data.dex,
                 is_sell: data.is_sell,
-                category: whaleInfo.category
+                category: whaleInfo.category,
+                message: ''
             };
 
             console.log(`Processing whale transaction:`, {

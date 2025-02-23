@@ -28,6 +28,7 @@ export interface WhaleTransaction {
     dex: string;
     is_sell: boolean;
     category: string;
+    message: string;
 }
 
 export interface WhaleInfo {

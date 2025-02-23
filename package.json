@@ -21,6 +21,7 @@
     "express": "^4.21.2",
     "express-session": "^1.18.1",
     "mongodb": "^6.5.0",
+    "node-telegram-bot-api": "^0.66.0",
     "twitter-api-v2": "^1.19.1",
     "ws": "^8.16.0"
   },
@@ -28,6 +29,7 @@
     "@types/express": "^5.0.0",
     "@types/express-session": "^1.18.1",
     "@types/node": "^20.17.17",
+    "@types/node-telegram-bot-api": "^0.64.7",
     "@types/ws": "^8.5.10",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.3"

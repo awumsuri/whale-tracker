@@ -2,6 +2,8 @@ import requests
 import json
 import time
 from datetime import datetime, timedelta, timezone
+import pymongo
+from pymongo import MongoClient
 
 base_url = "https://swap-api.assetdash.com/api/api_v5/whalewatch"
 
@@ -17,6 +19,11 @@ headers = {
 # Initialize last seen timestamp (set it to None to fetch latest trades initially)
 last_timestamp = None
 
+# MongoDB connection setup
+client = MongoClient('mongodb://localhost:7777/')  # Replace with your MongoDB connection string
+db = client['whale-tracker']  # Database name
+trades_collection = db['twitter-whale-posts']  # Collection name
+
 def format_market_cap(market_cap):
     if market_cap >= 1_000_000_000:
         return f"${market_cap / 1_000_000_000:.2f}B"
@@ -29,7 +36,7 @@ def format_market_cap(market_cap):
 
 def fetch_live_whale_trades():
     """
-    Fetches whale trades since the last recorded timestamp, subtracting 20 minutes.
+    Fetches whale trades since the last recorded timestamp and saves to MongoDB.
     """
     global last_timestamp  # Use global variable to track the last seen timestamp
 
@@ -82,14 +89,33 @@ def fetch_live_whale_trades():
                         f"🚨 ${whale_name} whale just {action} ${amount} of ${token_symbol} {emoji} 👇\n\n"
                         f"📊 Coin: ${token_symbol} ({token_name})\n"
                         f"💰 Marketcap: {market_cap}\n"
+                        f"💰 Amount: ${amount}\n"
                         f"🚀 CA: {token_address}\n"
-                        f"📈 Chart: {chart_link}"
-                        
+                        f"📈 Chart: {chart_link}"                        
                     )
 
-                    print(message)
+                    # Create trade document for MongoDB
+                    trade_doc = {
+                        'timestamp': tx['timestamp'],
+                        'whale_name': whale_name,
+                        'trade_type': trade_type,
+                        'token_name': token_name,
+                        'token_symbol': token_symbol,
+                        'token_address': token_address,
+                        'amount': amount,
+                        'market_cap': tx['token_market_cap'],
+                        'chart_link': chart_link,
+                        'message': message
+                    }
 
-                # Update last_timestamp to the latest trade's timestampwh
+                    # Insert trade into MongoDB
+                    try:
+                        trades_collection.insert_one(trade_doc)
+                        print(f"✅ Trade saved to MongoDB: {whale_name} {action} {token_symbol}")
+                    except Exception as e:
+                        print(f"❌ Error saving to MongoDB: {e}")
+
+                # Update last_timestamp to the latest trade's timestamp
                 last_timestamp = new_timestamp
 
             else:

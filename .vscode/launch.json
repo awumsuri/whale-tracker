@@ -59,6 +59,14 @@
               "TWITTER_REDIRECT_URI": "${env:TWITTER_REDIRECT_URI}",
               "SESSION_SECRET": "${env:SESSION_SECRET}"
             }
-          }
+          },
+        {
+            "name": "Python: Current File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        }
     ]
 } 
