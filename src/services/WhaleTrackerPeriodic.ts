@@ -77,7 +77,7 @@ export class WhaleTrackerPeriodic {
     private async getLatestTransaction(): Promise<WhaleTransaction | null> {
         try {
             console.log('WhaleTracker2: Querying database for latest unposted transaction...');
-            const collection = this.db?.getCollection('twitter-whale-posts');
+            const collection = this.db?.getCollection('twitter_whale_posts');
             const transaction = await collection?.findOne(
                 { posted: { $ne: true } },
                 { sort: { timestamp: -1 } }
