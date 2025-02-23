@@ -29,7 +29,7 @@ export interface WhaleTransaction {
     is_sell: boolean;
     category: string;
     message: string;
-    action: string;
+    action?: string;
 }
 
 export interface WhaleInfo {
