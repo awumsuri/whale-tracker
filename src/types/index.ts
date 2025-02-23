@@ -20,7 +20,7 @@ export interface WebSocketCommand {
 export interface WhaleTransaction {
     wallet: string;    
     new_token: string;
-    amount_usd: number;
+    amount_usd: string;
     chain: string;
     trade_type?: string;
     timestamp?: number;
