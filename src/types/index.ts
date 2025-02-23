@@ -30,6 +30,7 @@ export interface WhaleTransaction {
     category: string;
     message: string;
     action?: string;
+    amount?: string;
 }
 
 export interface WhaleInfo {
