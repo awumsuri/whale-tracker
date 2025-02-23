@@ -140,6 +140,7 @@ def fetch_live_whale_trades():
                         'token_name': token_name,
                         'token_symbol': token_symbol,
                         'token_address': token_address,
+                        'action': action,
                         'amount': amount,
                         'market_cap': tx['token_market_cap'],
                         'chart_link': chart_link,

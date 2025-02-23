@@ -67,11 +67,13 @@ export class NotificationService {
     private async sendTelegramAlert(transaction: WhaleTransaction): Promise<void> {
         const message = this.formatTelegramMessage(transaction);
         try {
-            await this.telegramBot.sendMessage(process.env.TELEGRAM_CHAT_ID!, message, {
-                parse_mode: 'HTML',
-                disable_web_page_preview: true
-            });
-            console.log('Successfully sent Telegram alert:', message);
+            if (transaction.amount_usd > 1000 && transaction.action.toLowerCase() === 'bought') {
+                await this.telegramBot.sendMessage(process.env.TELEGRAM_CHAT_ID!, message, {
+                    parse_mode: 'HTML',
+                    disable_web_page_preview: true
+                });
+                console.log('Successfully sent Telegram alert:', message);
+            }
         } catch (error) {
             console.error('Failed to send Telegram alert:', error);
             throw error;
