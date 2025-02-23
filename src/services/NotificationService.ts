@@ -68,7 +68,9 @@ export class NotificationService {
 
     private async sendTelegramAlert(transaction: WhaleTransaction): Promise<void> {
         console.log(`transaction: ${transaction.amount} action: ${transaction.action}`);
+        
         const message = this.formatTelegramMessage(transaction);
+
         try {
             if (parseFloat(transaction?.amount ?? '0') > 1000 && transaction.action?.toLowerCase() === 'bought') {
                 await this.telegramBot.sendMessage(process.env.TELEGRAM_CHAT_ID!, message, {
