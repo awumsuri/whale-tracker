@@ -51,8 +51,7 @@ export class WhaleTrackerPeriodic {
             console.log('WhaleTrackerPeriodical: Checking for new transactions...');
             const latestTransaction = await this.getLatestTransaction();
             
-            if (latestTransaction) {   
-                
+            if (latestTransaction) {                
                 await this.notifications?.notifyNewTrade(latestTransaction);
                 console.log('WhaleTrackerPeriodical: Successfully posted transaction:', latestTransaction);
             } else {

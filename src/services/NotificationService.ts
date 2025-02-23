@@ -50,7 +50,9 @@ export class NotificationService {
     async notifyNewTrade(transaction: WhaleTransaction): Promise<void> {
         // TODO: Implement notification logic
         await this.postToTwitter(transaction);
+        console.log('Successfully posted to Twitter inside notifyNewTrade');
         await this.sendTelegramAlert(transaction);
+        console.log('Successfully sent Telegram alert inside notifyNewTrade');
     }
 
     private async postToTwitter(transaction: WhaleTransaction): Promise<void> {
