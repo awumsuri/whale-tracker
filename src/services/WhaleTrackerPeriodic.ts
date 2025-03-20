@@ -71,7 +71,7 @@ export class WhaleTrackerPeriodic {
             console.log('WhaleTrackerPeriodical: Querying database for latest unposted transaction...');
             const collection = this.db?.getCollection('twitter_whale_posts');
             const transaction = await collection?.findOne(
-                { posted: { $ne: true } },
+                { posted: { $ne: true }, amount: { $gte: 10000 } },
                 { sort: { timestamp: -1 } }
             );
 
