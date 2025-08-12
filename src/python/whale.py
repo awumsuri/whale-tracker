@@ -7,6 +7,10 @@ from pymongo import MongoClient
 import os
 import logging
 from logging.handlers import RotatingFileHandler
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 base_url = "https://swap-api.assetdash.com/api/api_v5/whalewatch"
 

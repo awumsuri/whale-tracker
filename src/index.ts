@@ -11,8 +11,8 @@ const MIN_USD_THRESHOLD = 3000;
 async function main() {
     try {
         // Start real-time tracker
-        const tracker = new WhaleTrackerRealTime(CIELO_WS_URL, MIN_USD_THRESHOLD);       
-        console.log('Real-time whale tracker initialized');
+        //const tracker = new WhaleTrackerRealTime(CIELO_WS_URL, MIN_USD_THRESHOLD);       
+        //console.log('Real-time whale tracker initialized');
 
         // Start periodic tracker
         const periodicTracker = new WhaleTrackerPeriodic();

@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import { WhaleTransaction } from '../types';
+import { WhaleTransaction, ContractMention } from '../types';
 import {  Scraper } from 'agent-twitter-client';
 import TelegramBot from 'node-telegram-bot-api';
 
@@ -93,5 +93,41 @@ export class NotificationService {
     private formatTelegramMessage(transaction: WhaleTransaction): string {
      
         return  transaction.message === '' ? `🚨 Whale Alert 🐋\n\nCategory: ${transaction.category}\nAmount: $${transaction.amount_usd.toLocaleString()}\nToken: ${transaction.new_token}\nChain: ${transaction.chain}` : transaction.message;
+    }
+
+    public async sendTrendingContractAlert(contractMention: ContractMention, latestTransaction: any): Promise<void> {
+        try {
+            if (!this.telegramBot) {
+                console.log('WhaleTrackerPeriodic: Notification service not available');
+                return;
+            }
+
+            const mentionCount = contractMention.mentions.length;
+            const timeWindow = '1 hour';
+            
+            const message = `🚨 TRENDING CONTRACT ALERT 🚨\n\n` +
+                `📈 Contract: ${latestTransaction.token_symbol || latestTransaction.token_name}\n` +
+                `🔗 Address: ${contractMention.contractAddress}\n` +
+                `📊 Mentions: ${mentionCount} times in ${timeWindow}\n` +
+                `💰 Latest Amount: $${latestTransaction.amount?.toLocaleString() || 'N/A'}\n` +
+                `🐋 Latest Whale: ${latestTransaction.whale_name || 'Unknown'}\n` +
+                `📈 Chart: ${latestTransaction.chart_link || 'N/A'}\n\n` +
+                `⚠️ This contract is getting significant attention from whales!`;
+
+            // Send to Telegram
+            if (this.telegramBot) {
+                const chatId = process.env.TELEGRAM_CHAT_ID;
+                if (chatId) {
+                    await this.telegramBot.sendMessage(chatId, message, {
+                        parse_mode: 'HTML',
+                        disable_web_page_preview: true
+                    });
+                    console.log(`WhaleTrackerPeriodic: Sent trending contract alert for ${contractMention.contractAddress}`);
+                }
+            }
+
+        } catch (error) {
+            console.error('WhaleTrackerPeriodic: Error sending trending contract alert:', error);
+        }
     }
 } 

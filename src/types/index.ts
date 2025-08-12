@@ -48,3 +48,13 @@ export interface WhaleConfig {
     network: string;
     addresses: string[];
 }
+
+
+export interface ContractMention {
+    contractAddress: string;
+    mentions: Array<{
+        timestamp: Date;
+        transactionId: string;
+    }>;
+    lastAlertSent?: Date;
+}
